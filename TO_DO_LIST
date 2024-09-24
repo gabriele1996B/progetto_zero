@@ -1,0 +1,37 @@
+#!/bin/bash
+
+TODO_FILE="$HOME/todo_list.txt"
+
+#Crea il file se non esiste
+touch "$TODO_FILE"
+
+case "$1" in
+  add)
+   	 #Aggiungi una nuova attività
+    shift
+    echo "$*" >> "$TODO_FILE"
+    echo "Attività aggiunta: $*"
+    ;;
+  
+  list)
+    	#Visualizza la to-do list
+    if [ -s "$TODO_FILE" ]; then
+      echo "Le tue attività:"
+      nl -w 2 -s ') ' "$TODO_FILE"
+    else
+      echo "La to-do list è vuota!"
+    fi
+    ;;
+  
+  remove)
+   	 # Rimuovi un'attività
+    shift
+    sed -i "${1}d" "$TODO_FILE" 2>/dev/null
+    echo "Attività $1 rimossa!"
+    ;;
+  
+  *)
+    #Mostra l'uso dello script
+    echo "Utilizzo: $0 {add 'testo attività' | list | remove numero}"
+    ;;
+esac
