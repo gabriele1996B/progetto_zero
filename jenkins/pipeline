@@ -1,0 +1,37 @@
+pipeline {
+    agent { label 'Docker' } // Sostituisci 'Docker' con il nome corretto del nodo, se necessario
+    environment {
+        REPO_URL = 'https://github.com/gabriele1996B/progetto_zero.git' // URL del repository GitHub
+        BRANCH = 'main' // Branch da cui clonare
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Clonare il repository GitHub
+                git branch: "${BRANCH}", url: "${REPO_URL}"
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                // Costruire l'immagine Docker
+                sh 'docker build -t image_todolist .'
+            }
+        }
+         stage('Deployer Docker Container') {
+            steps {
+                //rilascio immagine Docker
+                sh 'docker run -dt image_todolist'
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline completata con successo.'
+        }
+        failure {
+            echo 'Pipeline fallita.'
+        }
+    }
+}
