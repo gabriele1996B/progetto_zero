@@ -1,13 +1,13 @@
 pipeline {
-    agent { label 'Docker' } // Sostituisci 'Docker' con il nome corretto del nodo, se necessario
+    agent { label 'docker' } // Sostituisci 'Docker' con il nome corretto del nodo
     environment {
-        REPO_URL = 'https://github.com/gabriele1996B/progetto_zero.git' // URL del repository GitHub
+        REPO_URL = 'https://github.com/gabriele1996B/progetto_zero.git' // URL della repository GitHub
         BRANCH = 'main' // Branch da cui clonare
     }
     stages {
         stage('Clone Repository') {
             steps {
-                // Clonare il repository GitHub
+                // Clonare la repository GitHub
                 git branch: "${BRANCH}", url: "${REPO_URL}"
             }
         }
