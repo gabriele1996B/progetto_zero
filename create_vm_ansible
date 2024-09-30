@@ -1,0 +1,25 @@
+---
+- name: Create a virtual machine using virt-install
+  hosts: local
+  tasks:
+    - name: Install a virtual machine
+      command: >
+        virt-install
+        --name my_vm
+        --ram 1024
+        --disk path=/var/lib/libvirt/images/my_vm_disk.qcow2,size=10
+        --vcpus 1
+        --os-variant ubuntu20.04
+        --network network=default
+        --graphics vnc
+        --cdrom /var/lib/libvirt/images/ubuntu.iso
+      register: virt_install_result
+      ignore_errors: yes
+
+    - name: Check if VM was created
+      command: virsh list --all
+      register: virsh_list
+
+    - name: Output the result
+      debug:
+        var: virsh_list.stdout
