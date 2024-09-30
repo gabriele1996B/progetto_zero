@@ -1,0 +1,16 @@
+#per la persistenza dei dati aggiungiamo un volume - fare il comando qui sotto prima di lanciare lo script
+#sudo docker volume create grafana_volume
+
+volumes:
+  grafana_volume:
+    external: true
+
+services:
+  grafana:
+    image: grafana/grafana-oss:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes: 
+      - grafana_volume:/var/lib/grafana
+    network_mode: "host"
