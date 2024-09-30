@@ -1,13 +1,13 @@
 pipeline {
-    agent { label 'docker' } // Sostituisci 'Docker' con il nome corretto del nodo
+    agent { label 'docker' } // Sostituisci 'Docker' con il nome corretto del nodo, se necessario
     environment {
-        REPO_URL = 'https://github.com/gabriele1996B/progetto_zero.git' // URL della repository GitHub
+        REPO_URL = 'https://github.com/gabriele1996B/progetto_zero.git' // URL del repository GitHub
         BRANCH = 'main' // Branch da cui clonare
     }
     stages {
         stage('Clone Repository') {
             steps {
-                // Clonare la repository GitHub
+                // Clonare il repository GitHub
                 git branch: "${BRANCH}", url: "${REPO_URL}"
             }
         }
@@ -29,9 +29,21 @@ pipeline {
     post {
         success {
             echo 'Pipeline completata con successo.'
+            sh """
+                    curl -X POST \
+                    https://api.telegram.org/bot"iserisci_token_leva_le_virgolette"/sendMessage \
+                    -H "Content-Type: application/json" \
+                    -d '{"chat_id": "inserisci_chatID", "text": "Ciao, la pipeline è riuscita"}'
+                    """
         }
         failure {
             echo 'Pipeline fallita.'
+                    sh """
+                    curl -X POST \
+                    https://api.telegram.org/bot"iserisci_token_leva_le_virgolette"/sendMessage \
+                    -H "Content-Type: application/json" \
+                    -d '{"chat_id": "inserisci_chatID", "text": "Ciao, la pipeline è fallita"}'
+                    """
         }
     }
 }
